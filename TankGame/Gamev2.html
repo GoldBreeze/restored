@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC>
+<html lang="en">
+<meta charset="utf-8">
+    <style>
+        .resizem {
+    width: 20%;
+    height:20px;
+    visibility: visible;
+    float:right;
+}
+        
+       html {
+    background: black;
+    background-size:cover;
+    background-repeat: no-repeat;
+}
+    </style>
+    
+<body>  
+    
+
+            
+<audio controls autostart="false" class="resizem">
+    <source src="The Prodigy - Breathe.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+    
+    <p style="color:red"><b>JVC Shooter</b> <u>_|Ammo: <span id="ammowriter">|| Game Start</span>|_</u></p>   
+
+
+<canvas float="right" id="myCanvas" tabindex="0" width="600" height="500"
+style="border:2px solid #FFF000;"></canvas>
+
+    <p class= "resizem" style="color:red"><u><b>------------/Controls\------------</b></u> Use wsda to move the character, and the arrow keys to shoot in different directions. There is one ammo crate that will restock your ammo. You cannot move while you're shooting. Destroy the four enemies. || Game version 0.6
+------Update: Added moving enemies who can be destroyed separately, a short new tune, and a button to stop the music if you want.</p>
+
+   <button style="color:red;border-color:red;width:10%;height:24px;float:left" onclick="stop()">Stop Song</button>
+    
+<script>
+
+var x = 300;
+var xcenter = 310;
+var y = 300;
+var ycenter = 312;
+var xt = 15;
+var yt = 15;
+    
+var tab;
+var ammo = 10;
+var s = 4;
+var tick = 100;
+var key = [];
+var bullets = [];
+var baddies = [];
+var move = 0;
+var dem = 1;
+
+var number = 1;
+var drivedirection = 1;
+var gundirection = 1;
+var dude = 1;
+var ammocratecounter = true;
+    
+var music = new Audio("niceudu.wav");
+    function stop(){
+music.pause();
+    }
+music.play();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d"); 
+  
+var ex = 50;
+var ey = 50;
+    
+var f = 0;
+    
+tank = new Image();
+ammocrate = new Image();
+gun1 = new Image();
+gun2 = new Image();
+gun3 = new Image();
+gun4 = new Image();
+    
+evil = new Image();
+
+tanktwo = new Image();
+tankthree = new Image();
+tankfour = new Image();
+    
+tank.src="tank_y.png";
+gun1.src="gun1.png";
+gun2.src="gun2.png";
+gun3.src="gun3.png";
+gun4.src="gun4.png";
+tanktwo.src="tank_x.png";
+tankthree.src="tank_y2.png";
+tankfour.src="tank_x2.png";
+ammocrate.src="ammo.png";
+evil.src="enemy.png";
+    
+var dord = 1; 
+var move = 0;  
+c.addEventListener("keydown", function(k){
+    key[k.keyCode] = true;
+    tab = true;
+});    
+    
+c.addEventListener("keyup", function(k){
+    key[k.keyCode] = false;
+});
+    
+        var sam = 0;
+    
+    function animatrix(){
+        
+            ctx.clearRect(0, 0, 600, 500);
+            
+        
+        if (sam < 4){
+        //bad = new badguy();
+        //baddies.push(bad);
+        baddies[sam] = new badguy();
+        sam++;
+        }
+        
+        
+        
+        
+            amount = 0;
+        
+            if(key[87]){
+                if (y != 0){
+                y=y-1.5;
+                ycenter=ycenter-1.5;
+                drivedirection = 1;
+                }
+            }
+            if(key[83]){
+                if (y != 477){
+                y=y+1.5;
+                ycenter=ycenter+1.5;
+                drivedirection = 2;
+                }
+            }
+            if(key[65]){
+                if (x != 0){
+                x=x-1.5;
+                xcenter=xcenter-1.5;
+                drivedirection = 3;
+                }
+            }
+            if(key[68]){
+                if (x != 576){
+                x=x+1.5;
+                xcenter=xcenter+1.5;
+                drivedirection = 4;
+                }
+            }
+                
+        
+        
+                for (i=0; i<bullets.length; i++){
+        bullets[i].draw();
+        if (bullets[i].xb >= 20 && bullets[i].xb <= 35 && bullets[i].yb >= 20 && bullets[i].yb <= 35 && ammocratecounter){
+            ammocratecounter = false;
+            ammo = ammo + 10;
+            }else if (ammocratecounter){
+        ctx.drawImage(ammocrate, 20, 20);
+            }
+        }
+        
+        
+        
+        
+        
+
+        if (drivedirection == 1){
+        ctx.drawImage(tank,x,y);
+        }
+        else if(drivedirection == 3){
+        ctx.drawImage(tanktwo,x,y);   
+        }
+        else if (drivedirection == 2){
+        ctx.drawImage(tankthree,x,y);
+        }
+        else if(drivedirection == 4){
+        ctx.drawImage(tankfour,x,y);   
+        }
+        
+        if (gundirection == 2){
+        ctx.drawImage(gun1,xcenter,ycenter);
+        }
+        else if (gundirection == 1){
+        ctx.drawImage(gun2,xcenter,ycenter-16);
+        }
+        else if (gundirection == 4){
+        ctx.drawImage(gun3,xcenter+1,ycenter-2);
+        }
+        else if (gundirection == 3){
+        ctx.drawImage(gun4,xcenter-16,ycenter-2);
+        }
+        
+
+        
+       if (baddies[0] == 0 && baddies[1] == 0 && baddies[2] == 0 && baddies[3] == 0){
+            document.getElementById("ammowriter").innerHTML = "You Win!";
+            ctx = false;
+    }
+        
+        
+        if (baddies[0]){
+            baddies[0].moving();
+
+            if (x >= baddies[0].ex-20 && x <= baddies[0].ex+20 && y >= baddies[0].ey-20 && y <= baddies[0].ey+20){
+            document.getElementById("ammowriter").innerHTML = "You Lose!";
+            ctx = false;
+            }       
+            for (i=0; i<bullets.length; i++){ 
+                if (bullets[i].xb >= baddies[0].ex && bullets[i].xb <= baddies[0].ex+20 && bullets[i].yb >= baddies[0].ey && bullets[i].yb <= baddies[0].ey+20){
+            baddies[0] = 0;
+                }           
+            }             
+        }
+    
+                if (baddies[1]){
+            baddies[1].moving();
+
+            if (x >= baddies[1].ex-20 && x <= baddies[1].ex+20 && y >= baddies[1].ey-20 && y <= baddies[1].ey+20){
+            document.getElementById("ammowriter").innerHTML = "You Lose!";
+            ctx = false;
+            }      
+           for (i=0; i<bullets.length; i++){ 
+                if (bullets[i].xb >= baddies[1].ex && bullets[i].xb <= baddies[1].ex+20 && bullets[i].yb >= baddies[1].ey && bullets[i].yb <= baddies[1].ey+20){
+            baddies[1] = 0;
+                }           
+            }            
+         }
+        
+        if (baddies[2]){
+            baddies[2].moving();
+
+            if (x >= baddies[2].ex-20 && x <= baddies[2].ex+20 && y >= baddies[2].ey-20 && y <= baddies[2].ey+20){
+            document.getElementById("ammowriter").innerHTML = "You Lose!";
+            ctx = false;
+            }       
+            for (i=0; i<bullets.length; i++){ 
+                if (bullets[i].xb >= baddies[2].ex && bullets[i].xb <= baddies[2].ex+20 && bullets[i].yb >= baddies[2].ey && bullets[i].yb <= baddies[2].ey+20){
+            baddies[2] = 0;
+                }           
+            }             
+        }
+        
+        if (baddies[3]){
+            baddies[3].moving();
+
+            if (x >= baddies[3].ex-20 && x <= baddies[3].ex+20 && y >= baddies[3].ey-20 && y <= baddies[3].ey+20){
+            document.getElementById("ammowriter").innerHTML = "You Lose!";
+            ctx = false;
+            }       
+            for (i=0; i<bullets.length; i++){ 
+                if (bullets[i].xb >= baddies[3].ex && bullets[i].xb <= baddies[3].ex+20 && bullets[i].yb >= baddies[3].ey && bullets[i].yb <= baddies[3].ey+20){
+            baddies[3] = 0;
+                }           
+            }             
+        }
+            
+        
+        
+
+        
+        
+
+if (tab){
+if (ammo>=0){
+    document.getElementById("ammowriter").innerHTML = ammo;
+            
+
+    
+        if(key[40]){
+                key[87] = false;
+                key[83] = false;
+                key[65] = false;
+                key[68] = false;
+                dude = true;
+                ammo--;
+                s = 2;
+                gundirection = 2;
+                number++;
+                bullet = new u();
+                bullets.push(bullet);
+            }
+    
+            else if(key[38]){
+                key[87] = false;
+                key[83] = false;
+                key[65] = false;
+                key[68] = false;
+                dude = true;
+                ammo--;
+                s = 2;
+                gundirection = 1;
+                number++;
+                bullet = new d();
+                bullets.push(bullet);
+            }
+
+            else if(key[37]){
+                key[87] = false;
+                key[83] = false;
+                key[65] = false;
+                key[68] = false;
+                dude = true;
+                ammo--;
+                s = 2;
+                gundirection = 3;
+                number++;
+                bullet = new l();
+                bullets.push(bullet);
+            }
+            
+            else if(key[39]){
+                key[87] = false;
+                key[83] = false;
+                key[65] = false;
+                key[68] = false;
+                dude = true;
+                ammo--;
+                s = 2;
+                gundirection = 4;
+                number++;
+                bullet = new r();
+                bullets.push(bullet);    
+            }
+        }
+
+    tab = false;
+}
+        
+        //requestAnimationFrame(animatrix);
+        
+}setInterval(animatrix, 1000/60);
+
+animatrix();
+    
+function r(){        
+        if (dude){
+        this.yb = ycenter-1;
+        this.xb = xcenter+17;
+        }           
+        dude = false;
+        this.draw = function (){
+        this.yb;
+        this.xb += 4; 
+        ctx.fillStyle = "rgba(255, 0, 0, 1)";
+        ctx.beginPath();
+        ctx.rect(this.xb, this.yb, s, s);
+        ctx.closePath();
+        ctx.fill();
+        };
+    }
+    
+function l (){              
+        if (dude){
+        this.yb = ycenter-1;
+        this.xb = xcenter-17;
+        }           
+        dude = false;
+        this.draw = function (){
+        this.xb -= 4;
+        ctx.fillStyle = "rgba(255, 0, 0, 1)";
+        ctx.beginPath();
+        ctx.rect(this.xb, this.yb, s, s);
+        ctx.closePath();
+        ctx.fill();
+        };
+    }
+    
+function u (){              
+        if (dude){
+        this.yb = ycenter+17;
+        this.xb = xcenter+1;
+        }           
+        dude = false;
+        this.draw = function (){
+        this.yb += 4;
+        ctx.fillStyle = "rgba(255, 0, 0, 1)";
+        ctx.beginPath();
+        ctx.rect(this.xb, this.yb, s, s);
+        ctx.closePath();
+        ctx.fill();
+        };
+    }
+      
+function d (){              
+        if (dude){
+        this.yb = ycenter-17;
+        this.xb = xcenter+1;
+        }           
+        dude = false;
+        this.draw = function (){
+        this.yb -= 4;
+        ctx.fillStyle = "rgba(255, 0, 0, 1)";
+        ctx.beginPath();
+        ctx.rect(this.xb, this.yb, s, s);
+        ctx.closePath();
+        ctx.fill();
+        };
+    }
+    
+    
+    
+
+    
+    
+function badguy (){
+    
+        function moved (){
+        move = Math.floor((Math.random() * 4) + 1);
+    }setInterval(moved, 1000);
+        
+    this.ey = Math.floor((Math.random() * 150) + 1);
+    this.ex = Math.floor((Math.random() * 150) + 1);
+        
+       this.moving = function (){
+            if (this.ey > 0 && move == 1){
+       this.ey-=Math.floor((Math.random() * 5) + 1);
+       }  
+            else if (this.ey < 479.5 && move == 2){
+       this.ey+=Math.floor((Math.random() * 5) + 1);
+       }
+            else if (this.ex > 0 && move == 3){
+       this.ex-=Math.floor((Math.random() * 5) + 1);
+       }
+            else if (this.ex < 578.5 && move == 4){
+       this.ex+=Math.floor((Math.random() * 5) + 1);
+       }
+            if (this.ex >= 578.5){
+            this.ex = 0;
+            }
+            else if (this.ex <= 0){
+            this.ex = 578.5;
+            }
+            else if (this.ey <= 0){
+            this.ey = 479.5;
+            }
+            else if (this.ey >= 479.5){
+            this.ey = 0;
+            }
+            
+
+        ctx.drawImage(evil, this.ex, this.ey);
+        };
+           dem++; 
+    }
+
+    </script>
+
+    </body>
+</html>

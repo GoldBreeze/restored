@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Bundled Site</title>
+<link rel="Watch Icon" href="Favicon.ico" type="image/x-icon">
+
+
+<style>
+html {
+background: url(230sbex.jpg);
+background-size:cover;
+background-repeat: no-repeat;
+}
+.objsize {
+width:17%;
+height:100px;
+}
+.small {
+line-height:130%;
+}
+.resizem {
+width: 16.8%;
+display: block;
+height:27px;
+}
+
+    body.edge {
+    margin-right: .75%;
+    margin-left: .75%;
+}
+
+.Side{
+color:green;
+float:right;
+width:15%;
+height:237;
+font-family:Monospace;
+background-color:black;
+padding:6px;
+}
+
+.Green{
+color:green;
+}
+
+.Gold{
+color:lime;
+}
+
+a:link  {color:#000000; background-color:transparent}
+a:visited {color:#ff0000; background-color:transparent}
+a:hover   {color:green; background-color:transparent}
+a:active  {color:green; background-color:transparent}  
+</style> 
+    
+<script>
+    var songnum = 1;
+</script> 
+    
+</head>
+    
+<body class="edge">
+    
+<script>
+function songpickerup() {
+    if(songnum<12) {
+++songnum;
+document.getElementById("meg3").src=songnum+".mp3";
+document.getElementById("meg4").src=songnum+".m4a";
+document.getElementById("wave").src=songnum+".wav";
+}
+    else {
+songnum = 1;
+document.getElementById("meg3").src=songnum+".mp3";
+document.getElementById("meg4").src=songnum+".m4a";
+document.getElementById("wave").src=songnum+".wav";
+    }
+document.getElementById("music").load();
+document.getElementById("music").play();
+document.getElementById("snumber").innerHTML=songnum;
+}
+</script>
+<script>
+function songpickerdown() {
+    if(songnum>1) {
+--songnum;
+document.getElementById("meg3").src=songnum+".mp3";
+document.getElementById("meg4").src=songnum+".m4a";
+document.getElementById("wave").src=songnum+".wav";
+}
+    else {
+songnum = 12;
+document.getElementById("meg3").src=songnum+".mp3";
+document.getElementById("meg4").src=songnum+".m4a";
+document.getElementById("wave").src=songnum+".wav";
+    }
+document.getElementById("music").load();
+document.getElementById("music").play();
+document.getElementById("snumber").innerHTML=songnum;
+}
+</script>
+<script>
+songnum;
+function mualert() {
+	switch (songnum) {
+	case 1:
+		alert("Just A Glitch -by Kursa")
+		break;
+	case 2:
+		alert("7th Dimension -by KOAN Sound")
+		break;
+	case 3:
+		alert("Kalifornia -by Fatboy Slim")
+		break;
+	case 4:
+		alert("Setting Sun -by The Chemical Brothers")
+		break;
+	case 5:
+		alert("Clint Eastwood -by Gorillaz")
+		break;
+	case 6:
+		alert("Sofa -by Caravan Palace")
+		break;
+	case 7:
+		alert("Time -by Pink Floyd")
+		break;
+	case 8:
+		alert("The Distance -by CAKE")
+		break;
+	case 9:
+		alert("Arabella -by Arctic Monkeys")
+		break;
+	case 10:
+		alert("5/4 -by Gorillaz")
+		break;
+	case 11:
+		alert("R U Mine -by Arctic Monkeys")
+		break;
+	case 12:
+		alert("Sonne -by Rammstein")
+		break;
+	}
+}
+</script>
+
+<div class="Side">
+<p><b> Welcome to my old website. Most of it's features have been removed, as it is now a static web page. This site will serve as a portal to my other projects and websites.</b></p><p>-August Byrne</p>
+</div>
+<h1 class="small" style="color:red;text-align:center;font-family:Impact">My Old <span style="color:green">Website</span><object class="objsize" align="left" data="Played.html"></object></h1>
+
+<h2 style="color:red;text-align:center;font-family:Monospace"><i>Site Of <span class="Green" onmouseover="this.className='Gold'" onmouseout="this.className='Green'">August</span></i></h2>
+
+<audio controls class="resizem" autostart="true" id="music" onended="songpickerup()" >
+  <source id="meg3" src="1.mp3" type="audio/mpeg">
+  <source id="meg4" src="1.m4a" type="audio/mpeg">
+  <source id="wave" src="1.wav" type="audio/wav">
+Your browser does not support the audio element.
+</audio>
+
+
+<button style="color:red;width:4.5%;height:24px;margin-right: -.6%;margin-left: -.1%" onclick="songpickerdown()"><--</button>
+<button style="color:red;width:8.6%;height:24px;margin-right: -.1%;margin-left: -.1%" onclick="mualert()">Song #<span id="snumber">1</span></button>
+<button style="color:red;width:4.5%;height:24px;margin-right: -.6%;margin-left: -.6%" onclick="songpickerup()">--></button>
+<!-- This music thing took the longest time. Still learning. -->
+    
+<br></br>
+<p style="line-height:50%;margin-left:6%;color:red;text-align:left"><u><i>Projects</i></u></p>
+
+<form action="XPS_710_Revival.html" name="project1">
+<input type="submit" style="color:red;width:17%;height:24px;margin-right: -.1%;margin-left: -.1%" value="XPS Project (Completed)">
+</form>
+    
+<form action="SpaceShooter/Behind_The_Stars.html" name="game2">
+<input type="submit" style="color:red;width:17%;height:24px;margin-right: -.1%;margin-left: -.1%" value="Second Game">
+</form>
+    
+    <form action="TankGame/Gamev2.html" name="game1">
+<input type="submit" style="color:red;width:17%;height:24px;margin-right: -.1%;margin-left: -.1%" value="First Game">
+</form>
+
+</body>
+</meta>
+</html>

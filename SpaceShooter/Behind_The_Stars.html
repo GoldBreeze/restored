@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC>
+<html lang="en">
+<meta charset="utf-8">
+
+    <style>
+       html {
+    background: black;
+    background-size:cover;
+    background-repeat: no-repeat;
+}
+    </style>
+    
+<body>
+    
+
+
+<audio src="FutureHouse_v2.mp3" type="audio/mpeg" autoplay="true" visible="false">
+</audio>
+
+<canvas id="myCanvas" tabindex="0" width="800" height="600"
+style="border:2px solid #BBF999;"></canvas>
+    
+<script>
+bgcycle = new Image();
+bgcycle.src = "bgcycle.png";
+ship1 = new Image();
+ship1.src = "ship3.png";
+ship2 = new Image();
+ship2.src = "ship4.png";
+    
+    
+var scrollVal = 0;   
+var bgwidth = 800;
+var bgheight = 600;
+var y = 300;
+var x = 10;
+var key = [];     
+var spaceshipanimation = 1;   
+var lazers = [];
+var singlelazer;
+var i = 0;   
+var size = 2;
+var on = 1;
+var dude = 1;
+var health = 100;
+var recharge = 100;
+var beamnumber = 1;
+var beams = [];
+    
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+    
+    
+    c.addEventListener("keydown", function(k){
+    key[k.keyCode] = true;
+});    
+    
+c.addEventListener("keyup", function(k){
+    key[k.keyCode] = false;
+});
+    
+    
+
+    
+function animatrix(){   
+        ctx.clearRect(0, 0, 800, 600);
+     
+     if(key[83]){
+         if (y != 552){
+            y=y+4;
+            spaceshipanimation = 2;
+         }
+     }
+     if(key[87]){
+         if (y != 0){
+             y=y-4;
+             spaceshipanimation = 2;
+         }
+     }
+
+
+
+    if(scrollVal >= 800){
+        scrollVal = 0;
+    }
+    scrollVal++;    
+    
+    ctx.drawImage(bgcycle,-scrollVal,0,800,600);
+    ctx.drawImage(bgcycle,800-scrollVal,0,800,600);
+    
+    
+    if (spaceshipanimation == 1){
+        ctx.drawImage(ship1,x,y);
+    }else if (spaceshipanimation == 2){
+        ctx.drawImage(ship2,x,y);
+    }   
+    
+    spaceshipanimation = 1;
+    
+    for (i=0; i<lazers.length; i++){
+        if (lazers[i].x < 808){
+        lazers[i].draw();
+        }else{
+        lazers[i] = false;   
+        }
+    }
+    for (i=0; i<beams.length; i++){
+        if (beams[i].t > .03){
+        beams[i].draw();
+        }else{
+        beams[i] = false;
+        }
+    }
+    
+
+    if (size<8 && key[39] && recharge > (size * 6.25)){
+        on = 2;
+        size+=.08;
+        ctx.fillStyle = "rgba(35, 0, 255, .8)";
+        ctx.beginPath();
+        ctx.arc(x+88, y+23, size,(Math.PI/180)*0,(Math.PI/180)*360,true);
+        ctx.fill();
+        ctx.closePath();
+        
+    }
+    if (on == 2 && key[39] == false){
+        
+        singlelazer = new shot();
+        lazers.push(singlelazer);
+        on = 3;
+        recharge = recharge - (size * 6.25);
+        size = 2;
+
+    }   
+    dude = true;
+     
+
+    if (key[37] && recharge == 100){
+        
+        beamnumber = new beam();
+        beams.push(beamnumber);
+        recharge = 0;
+    }
+     
+        //Health Bar
+        ctx.fillStyle = "rgba(255, 10, 40, .8)";
+        ctx.beginPath();
+        ctx.fillRect(690, 10, health, 10);
+        ctx.closePath();
+    
+        ctx.strokeStyle = "rgba(0, 255, 200, .8)";
+        ctx.beginPath();
+        ctx.strokeRect(689, 9, 101, 11);
+        ctx.closePath();
+     
+        
+        //Recharge Bar
+        ctx.fillStyle = "rgba(100, 200, 100, .75)";
+        ctx.beginPath();
+        ctx.fillRect(690, 40, recharge, 10);
+        ctx.closePath();
+    
+        ctx.strokeStyle = "rgba(0, 255, 200, .8)";
+        ctx.beginPath();
+        ctx.strokeRect(689, 39, 101, 11);
+        ctx.closePath();
+     
+    if (recharge < 100 && key[37] != true && key[39] != true){
+    recharge+=.75;
+    }else if (recharge < 100 && key[39] == true || recharge < 100 && key[37] == true){
+    recharge+=.25;    
+    }
+    
+    if (recharge > 99){
+     recharge =100;   
+    }
+    
+ }setInterval(animatrix, 1000/60);
+    
+animatrix();
+    
+function shot(){        
+        if (dude){
+        this.y = y+23;
+        this.x = x+88;
+        this.size = size;
+        }           
+        dude = false;
+        this.draw = function (){
+        this.y;
+        this.x += 8; 
+        ctx.fillStyle = "rgba(255, 15, 10, .9)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size,(Math.PI/180)*0,(Math.PI/180)*360,true);
+        ctx.fill();
+        ctx.closePath();
+        
+        };
+    }
+    
+function beam(){
+        if (dude){
+        this.t = .8;
+        }  
+    this.draw = function(){
+        dude = false;
+        ctx.fillStyle = "rgba(0, 50, 240, "+this.t+")";
+        ctx.beginPath();
+        ctx.lineTo(800, y+28);
+        ctx.arc(x+84, y+23, 5,(Math.PI/180)*90,(Math.PI/180)*270,true);
+        ctx.lineTo(800, y+18);
+        ctx.fill();
+        ctx.closePath();
+        this.t-=.01
+}
+
+}
+    
+</script>
+
+</body>
+</html>
